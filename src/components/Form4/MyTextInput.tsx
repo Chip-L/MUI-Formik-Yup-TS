@@ -41,7 +41,7 @@ const MyTextInput = ({
       value={field.value}
       onChange={field.onChange}
       onBlur={(event) => handleOnBlur(event)}
-      error={meta.touched && Boolean(meta.error)}
+      error={meta.touched && !!meta.error}
       helperText={meta.touched && meta.error}
       required={required}
     />

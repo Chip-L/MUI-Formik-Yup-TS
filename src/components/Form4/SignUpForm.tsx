@@ -1,10 +1,9 @@
 import Stack from "@mui/material/Stack";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import MyCheckbox from "./MyCheckbox";
 import MySelect from "./MySelect";
 import MyTextInput from "./MyTextInput";
-import Button from "@mui/material/Button";
 
 interface FormValues {
   firstName: string;
@@ -40,13 +39,6 @@ const validationSchema = Yup.object({
 });
 
 const SignUpForm = () => {
-  const handleFormikSubmit = (
-    values: FormValues,
-    _formikHelpers: FormikHelpers<FormValues>
-  ) => {
-    console.log("handleFormikSubmit", JSON.stringify(values, null, 2));
-  };
-
   const handleChange = async (
     field: string,
     value: string | boolean | string[]
@@ -77,7 +69,7 @@ const SignUpForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={handleFormikSubmit}
+      onSubmit={() => {}}
     >
       {(formik) => (
         <form onSubmit={formik.handleSubmit}>
@@ -107,7 +99,9 @@ const SignUpForm = () => {
             <MySelect
               label="Job Type"
               name="jobType"
-              options={[
+              required
+              handleDBSubmit={handleChange}
+              selectOptions={[
                 { value: "", label: "Select a job type" },
                 { value: "designer", label: "Designer" },
                 { value: "development", label: "Developer" },
@@ -119,10 +113,6 @@ const SignUpForm = () => {
             <MyCheckbox name="acceptedTerms">
               I accept the terms and conditions
             </MyCheckbox>
-
-            <Button type="submit" variant="contained">
-              Submit
-            </Button>
           </Stack>
         </form>
       )}
