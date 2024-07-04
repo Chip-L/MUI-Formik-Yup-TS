@@ -44,7 +44,33 @@ const SignUpForm = () => {
     values: FormValues,
     _formikHelpers: FormikHelpers<FormValues>
   ) => {
-    console.log(JSON.stringify(values, null, 2));
+    console.log("handleFormikSubmit", JSON.stringify(values, null, 2));
+  };
+
+  const handleChange = async (
+    field: string,
+    value: string | boolean | string[]
+  ) => {
+    /* handle Change from "src/components/CaseHeader/CaseHeader.tsx" */
+    // if (
+    //   typeof value != "object" &&
+    //   value &&
+    //   values[field as keyof typeof values] === value
+    // )
+    //   return;
+
+    // await setFieldValue(field, value, true);
+    // const validationErrors = await setTouched({ ...touched, [field]: true }, true);
+    // if (
+    //   (validationErrors && !Object.hasOwn(validationErrors, field)) ||
+    //   !validationErrors
+    // ) {
+
+    //   updateCaseHeader(field, value); <== I think this is the only line still required here...
+
+    // }
+
+    console.log("handleChange: do submission", { field, value });
   };
 
   return (
@@ -55,42 +81,27 @@ const SignUpForm = () => {
     >
       {(formik) => (
         <form onSubmit={formik.handleSubmit}>
-          {/* <label htmlFor="firstName">First Name</label>
-          {/* <input
-            id="firstName"
-            // name="firstName"
-            type="text"
-            // onChange={formik.handleChange}
-            // onBlur={formik.handleBlur}
-            // value={formik.values.firstName}
-            {...formik.getFieldProps("firstName")}
-          />
-          {formik.touched.firstName && formik.errors.firstName ? (
-            <div>{formik.errors.firstName}</div>
-          ) : null} */}
-          {/*
-          <Field name="firstName" type="text" />
-          <ErrorMessage name="firstName" /> */}
           <Stack spacing={2}>
             <MyTextInput
               label="First Name"
               name="firstName"
-              type="text"
-              placeholder="Jane"
+              required
+              handleDBSubmit={handleChange}
             />
 
             <MyTextInput
               label="Last Name"
               name="lastName"
-              type="text"
-              placeholder="Doe"
+              required
+              handleDBSubmit={handleChange}
             />
 
             <MyTextInput
               label="Email Address"
               name="email"
               type="email"
-              placeholder="jane@formik.com"
+              required
+              handleDBSubmit={handleChange}
             />
 
             <MySelect
