@@ -1,7 +1,7 @@
+import Footer from "@components/Footer";
+import Header from "@components/Header";
+import { Form4 } from "@components/SignUpForm";
 import Container from "@mui/material/Container";
-import Footer from "../Footer";
-import { Form4 } from "../Form4";
-import Header from "../Header";
 
 function App() {
   return (

@@ -1,9 +1,7 @@
+import { MyCheckbox, MySelect, MyTextInput } from "@components/Fields";
 import Stack from "@mui/material/Stack";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import MyCheckbox from "./MyCheckbox";
-import MySelect from "./MySelect";
-import MyTextInput from "./MyTextInput";
 
 interface FormValues {
   firstName: string;
