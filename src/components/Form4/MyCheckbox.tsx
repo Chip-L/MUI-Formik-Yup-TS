@@ -1,26 +1,64 @@
+import Stack from "@mui/material/Stack";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Typography from "@mui/material/Typography";
 import { useField } from "formik";
-import { PropsWithChildren } from "react";
 
 interface MyCheckboxProps {
   name: string;
+  label: string;
+  required?: boolean;
+  handleDBSubmit: (id: string, value: string) => void;
 }
 
-const MyCheckbox = ({ children, name }: PropsWithChildren<MyCheckboxProps>) => {
+const MyCheckbox = ({
+  label,
+  name,
+  required = false,
+  handleDBSubmit,
+}: MyCheckboxProps) => {
   // React treats radios and checkbox inputs differently from other input types: select and textarea.
   // Formik does this too! When you specify `type` to useField(), it will
   // return the correct bag of props for you -- a `checked` prop will be included
   // in `field` alongside `name`, `value`, `onChange`, and `onBlur`
-  const [field, meta] = useField({ name, type: "checkbox" });
+  const [field, meta, helper] = useField({ name, type: "checkbox" });
+
+  const handleOnBlur = (e: React.FocusEvent<HTMLButtonElement, Element>) => {
+    console.log("handleOnBlur", field);
+    field.onBlur(e);
+    console.log("touched:", meta.touched);
+    console.log("error:", meta.error);
+    if (!meta.touched || !meta.error) {
+      console.log("submit to db");
+      handleDBSubmit(field.name, field.value);
+    }
+  };
+
   return (
-    <div className="fieldContainer">
-      <label className="checkbox-input">
-        <input type="checkbox" {...field} />
-        {children}
-      </label>
+    <Stack>
+      <FormControlLabel
+        required={required}
+        control={
+          <Checkbox
+            name={name}
+            checked={field.checked}
+            onChange={(_, checked) => helper.setValue(checked)}
+            onBlur={handleOnBlur}
+            inputProps={{ "aria-label": "controlled" }}
+          />
+        }
+        label={label}
+      />
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <Typography
+          variant="errorMessage"
+          sx={{ color: "error.main" }}
+          className="MuiFormHelperText-root Mui-error MuiFormHelperText-sizeMedium MuiFormHelperText-contained Mui-required"
+        >
+          {meta.error}
+        </Typography>
       ) : null}
-    </div>
+    </Stack>
   );
 };
 

@@ -110,9 +110,12 @@ const SignUpForm = () => {
               ]}
             />
 
-            <MyCheckbox name="acceptedTerms">
-              I accept the terms and conditions
-            </MyCheckbox>
+            <MyCheckbox
+              name="acceptedTerms"
+              label="I accept the terms and conditions"
+              required
+              handleDBSubmit={handleChange}
+            />
           </Stack>
         </form>
       )}
