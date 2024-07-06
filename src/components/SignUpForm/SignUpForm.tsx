@@ -39,7 +39,7 @@ const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required"),
   jobType: Yup.string()
     .oneOf(["designer", "development", "product", "other"], "Invalid Job Type")
-    .required("Required"),
+    .required("Please select a job type"),
   languages: Yup.array()
     .of(Yup.number().required("Language selection is required"))
     .when("$jobType", (selectedJobType, schema) => {

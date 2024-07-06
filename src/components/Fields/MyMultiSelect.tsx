@@ -51,6 +51,7 @@ const MyMultiSelect = ({
 
   const submitValues = () => {
     if (!touched || !error) {
+      console.log("MyMultiSelect: submit to db");
       handleDBSubmit(name, value);
     }
   };

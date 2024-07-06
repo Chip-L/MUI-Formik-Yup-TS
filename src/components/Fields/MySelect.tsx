@@ -42,6 +42,7 @@ const MySelect = ({
   const handleOnBlur = (e: React.FocusEvent<HTMLDivElement, Element>) => {
     field.onBlur(e);
     if (!meta.touched || !meta.error) {
+      console.log("MySelect: submit to db");
       handleDBSubmit(field.name, field.value);
     }
   };
