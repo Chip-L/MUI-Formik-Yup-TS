@@ -1,4 +1,9 @@
-import { MyCheckbox, MySelect, MyTextInput } from "@components/Fields";
+import {
+  MyCheckbox,
+  MyMultiSelect,
+  MySelect,
+  MyTextInput,
+} from "@components/Fields";
 import Stack from "@mui/material/Stack";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -8,7 +13,8 @@ interface FormValues {
   lastName: string;
   email: string;
   jobType: string;
-  accepted: boolean;
+  languages?: number[];
+  acceptedTerms: boolean;
 }
 
 const initialValues: FormValues = {
@@ -16,7 +22,8 @@ const initialValues: FormValues = {
   lastName: "",
   email: "",
   jobType: "",
-  accepted: false,
+  languages: [0],
+  acceptedTerms: false,
 };
 
 const validationSchema = Yup.object({
@@ -31,6 +38,11 @@ const validationSchema = Yup.object({
   jobType: Yup.string()
     .oneOf(["designer", "development", "product", "other"], "Invalid Job Type")
     .required("Required"),
+  // TODO: Make required only if "developer"
+  languages: Yup.array()
+    .of(Yup.number().required())
+    .min(1, "at least 1")
+    .required("required"),
   acceptedTerms: Yup.boolean()
     .required("Required")
     .oneOf([true], "You must accept the terms and conditions."),
@@ -100,13 +112,29 @@ const SignUpForm = () => {
               required
               handleDBSubmit={handleChange}
               selectOptions={[
-                { value: "", label: "Select a job type" },
                 { value: "designer", label: "Designer" },
                 { value: "development", label: "Developer" },
                 { value: "product", label: "Product Manager" },
                 { value: "other", label: "Other" },
               ]}
             />
+
+            {formik.values.jobType === "development" && (
+              <>
+                <MyMultiSelect
+                  label="Known Languages"
+                  name="languages"
+                  handleDBSubmit={handleChange}
+                  required
+                  selectOptions={[
+                    { value: 0, label: "JavaScript" },
+                    { value: 1, label: "Java" },
+                    { value: 2, label: "C" },
+                    { value: 3, label: "C++" },
+                  ]}
+                />
+              </>
+            )}
 
             <MyCheckbox
               name="acceptedTerms"
