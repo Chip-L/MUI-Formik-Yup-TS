@@ -1,19 +1,22 @@
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { SelectOptionType } from "@types";
 import { useField } from "formik";
-import { useMemo, useState } from "react";
-
-interface SelectOption {
-  value: string | number;
-  label: string;
-}
+import { useState } from "react";
 
 interface MySelectProps {
   name: string;
   label: string;
-  selectOptions: SelectOption[];
+  selectOptions: SelectOptionType[];
   required?: boolean;
   handleDBSubmit: (id: string, value: string) => void;
+}
+
+function getOptionValues(
+  selectOptions: SelectOptionType[],
+  fieldValue: string | number
+): SelectOptionType | null {
+  return selectOptions.filter((o) => o.value === fieldValue)[0] ?? null;
 }
 
 const MySelect = ({
@@ -23,31 +26,29 @@ const MySelect = ({
   required = false,
   handleDBSubmit,
 }: MySelectProps) => {
-  const [field, meta, { setValue }] = useField(name);
-  const [inputValue, setInputValue] = useState("");
-  const options = useMemo(
-    () => selectOptions.map((option) => option.value),
-    [selectOptions]
-  );
+  const [field, meta, helper] = useField(name);
+  const setFormValue = helper.setValue;
 
-  const handleOnChange = (_event: any, newValue: string | null) => {
+  const [value, setValue] = useState<SelectOptionType | null>(
+    getOptionValues(selectOptions, field.value)
+  );
+  const [inputValue, setInputValue] = useState("");
+
+  const handleOnChange = (_event: any, newValue: SelectOptionType | null) => {
+    setFormValue(newValue?.value);
     setValue(newValue);
   };
 
   const handleOnBlur = (e: React.FocusEvent<HTMLDivElement, Element>) => {
-    console.log("MySelect: handleOnBlur", field);
     field.onBlur(e);
-    console.log("touched:", meta.touched);
-    console.log("error:", meta.error);
     if (!meta.touched || !meta.error) {
-      console.log("submit to db");
       handleDBSubmit(field.name, field.value);
     }
   };
 
   return (
     <Autocomplete
-      value={field.value}
+      value={value}
       onChange={handleOnChange}
       onBlur={handleOnBlur}
       inputValue={inputValue}
@@ -55,7 +56,8 @@ const MySelect = ({
         setInputValue(newInputValue);
       }}
       id={name}
-      options={options}
+      options={selectOptions}
+      isOptionEqualToValue={(o, v) => o.label === v.label}
       renderInput={(params) => (
         <TextField
           {...params}
