@@ -15,6 +15,7 @@ interface FormValues {
   jobType: string;
   languages?: number[];
   acceptedTerms: boolean;
+  isHuman?: boolean | null;
 }
 
 const initialValues: FormValues = {
@@ -22,8 +23,9 @@ const initialValues: FormValues = {
   lastName: "",
   email: "",
   jobType: "",
-  languages: [0],
+  languages: [],
   acceptedTerms: false,
+  isHuman: null,
 };
 
 const validationSchema = Yup.object({
@@ -38,11 +40,15 @@ const validationSchema = Yup.object({
   jobType: Yup.string()
     .oneOf(["designer", "development", "product", "other"], "Invalid Job Type")
     .required("Required"),
-  // TODO: Make required only if "developer"
   languages: Yup.array()
-    .of(Yup.number().required())
-    .min(1, "at least 1")
-    .required("required"),
+    .of(Yup.number().required("Language selection is required"))
+    .when("$jobType", (selectedJobType, schema) => {
+      return selectedJobType[0] === "development"
+        ? schema
+            .min(1, "At least one language is required for developers")
+            .required("Language selection is required for developers")
+        : schema.notRequired();
+    }),
   acceptedTerms: Yup.boolean()
     .required("Required")
     .oneOf([true], "You must accept the terms and conditions."),
@@ -51,27 +57,8 @@ const validationSchema = Yup.object({
 const SignUpForm = () => {
   const handleChange = async (
     field: string,
-    value: string | boolean | string[]
+    value: string | boolean | number | number[]
   ) => {
-    /* handle Change from "src/components/CaseHeader/CaseHeader.tsx" */
-    // if (
-    //   typeof value != "object" &&
-    //   value &&
-    //   values[field as keyof typeof values] === value
-    // )
-    //   return;
-
-    // await setFieldValue(field, value, true);
-    // const validationErrors = await setTouched({ ...touched, [field]: true }, true);
-    // if (
-    //   (validationErrors && !Object.hasOwn(validationErrors, field)) ||
-    //   !validationErrors
-    // ) {
-
-    //   updateCaseHeader(field, value); <== I think this is the only line still required here...
-
-    // }
-
     console.log("handleChange: do submission", { field, value });
   };
 
@@ -81,8 +68,8 @@ const SignUpForm = () => {
       validationSchema={validationSchema}
       onSubmit={() => {}}
     >
-      {(formik) => (
-        <form onSubmit={formik.handleSubmit}>
+      {({ values }) => (
+        <form>
           <Stack spacing={2}>
             <MyTextInput
               label="First Name"
@@ -119,7 +106,7 @@ const SignUpForm = () => {
               ]}
             />
 
-            {formik.values.jobType === "development" && (
+            {values.jobType === "development" && (
               <>
                 <MyMultiSelect
                   label="Known Languages"

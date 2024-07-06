@@ -18,17 +18,12 @@ const MyTextInput = ({
 }: MyTextInputProps) => {
   const [field, meta] = useField(name);
 
-  // The above isn't used because Field and ErrorMessage are already tied into the context
-
   const handleOnBlur = (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>
   ) => {
-    console.log("handleOnBlur", field);
     field.onBlur(e);
-    console.log("touched:", meta.touched);
-    console.log("error:", meta.error);
     if (!meta.touched || !meta.error) {
-      console.log("submit to db");
+      console.log("MyTextInput: submit to db");
       handleDBSubmit(field.name, field.value);
     }
   };
@@ -45,21 +40,6 @@ const MyTextInput = ({
       helperText={meta.touched && meta.error}
       required={required}
     />
-    // <div className="fieldContainer">
-    //   <label htmlFor={name}>{label}</label>
-    //   <Field name={name} type={type} placeholder={placeholder} />
-    //   <ErrorMessage name={name} component="div" className="error" />
-    //   {/* <input
-    //     id={name}
-    //     type={type ?? "text"}
-    //     {...field}
-    //     placeholder={placeholder}
-    //     className={meta.touched && meta.error ? "error" : ""}
-    //   /> */}
-    //   {/* {meta.touched && meta.error && (
-    //     <div className="error-message">{meta.error}</div>
-    //   )} */}
-    // </div>
   );
 };
 
