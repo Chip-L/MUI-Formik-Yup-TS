@@ -23,14 +23,16 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
+    /* Type Checking */
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+
     /* Paths*/
     "baseUrl": "./src", // This is to avoid adding the ./src prefix to each path below.
     "paths": {
       "@components/*": ["components/*"],
-      "@types": ["types/index.ts"]
-      // "@hooks/*": ["hooks/*"],
-      // "@utils/*": ["utils/*"],
-      // "@config/*": ["config/*"]
+      "@types": ["types/index.ts"],
+      "@hooks/*": ["hooks/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": ["src"]

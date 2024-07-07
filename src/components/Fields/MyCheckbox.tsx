@@ -24,12 +24,10 @@ const MyCheckbox = ({
   const [field, meta, helper] = useField({ name, type: "checkbox" });
 
   const handleOnBlur = (e: React.FocusEvent<HTMLButtonElement, Element>) => {
-    console.log("handleOnBlur", field);
     field.onBlur(e);
-    console.log("touched:", meta.touched);
-    console.log("error:", meta.error);
+
     if (!meta.touched || !meta.error) {
-      console.log("submit to db");
+      console.log("MyCheckbox: submit to db");
       handleDBSubmit(field.name, field.value);
     }
   };
@@ -44,7 +42,7 @@ const MyCheckbox = ({
             checked={field.checked}
             onChange={(_, checked) => helper.setValue(checked)}
             onBlur={handleOnBlur}
-            inputProps={{ "aria-label": "controlled" }}
+            inputProps={{ "aria-label": name }}
           />
         }
         label={label}

@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import { SelectOptionType } from "@types";
 import { useField } from "formik";
 import { useState } from "react";
+import { getOptionValue } from "@utils/getOptionValues";
 
 interface MySelectProps {
   name: string;
@@ -10,13 +11,6 @@ interface MySelectProps {
   selectOptions: SelectOptionType[];
   required?: boolean;
   handleDBSubmit: (id: string, value: string) => void;
-}
-
-function getOptionValues(
-  selectOptions: SelectOptionType[],
-  fieldValue: string | number
-): SelectOptionType | null {
-  return selectOptions.filter((o) => o.value === fieldValue)[0] ?? null;
 }
 
 const MySelect = ({
@@ -30,7 +24,7 @@ const MySelect = ({
   const setFormValue = helper.setValue;
 
   const [value, setValue] = useState<SelectOptionType | null>(
-    getOptionValues(selectOptions, field.value)
+    getOptionValue(selectOptions, field.value)
   );
   const [inputValue, setInputValue] = useState("");
 
@@ -42,6 +36,7 @@ const MySelect = ({
   const handleOnBlur = (e: React.FocusEvent<HTMLDivElement, Element>) => {
     field.onBlur(e);
     if (!meta.touched || !meta.error) {
+      console.log("MySelect: submit to db");
       handleDBSubmit(field.name, field.value);
     }
   };
