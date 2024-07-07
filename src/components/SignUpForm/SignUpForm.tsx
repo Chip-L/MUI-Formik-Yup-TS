@@ -14,9 +14,11 @@ const GENDER_OPTIONS = [
   { value: "female", label: "Female" },
   { value: "other", label: "Other" },
 ];
+
 interface FormValues {
   firstName: string;
   lastName: string;
+  age: number;
   email: string;
   jobType: string;
   languages?: number[];
@@ -28,6 +30,7 @@ interface FormValues {
 const initialValues: FormValues = {
   firstName: "",
   lastName: "",
+  age: 20,
   email: "",
   jobType: "",
   languages: [],
@@ -96,6 +99,13 @@ const SignUpForm = () => {
               label="Last Name"
               name="lastName"
               required
+              handleDBSubmit={handleChange}
+            />
+
+            <MyTextInput
+              label="Age"
+              name="age"
+              type="number"
               handleDBSubmit={handleChange}
             />
 
