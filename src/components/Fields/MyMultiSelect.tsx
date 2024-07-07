@@ -7,25 +7,7 @@ import {
 import { SelectOptionType } from "@types";
 import { useField } from "formik";
 import { useState } from "react";
-
-function getOptionValues(
-  selectOptions: SelectOptionType[],
-  fieldValue: any //string | number
-): SelectOptionType[] {
-  let returnValue: SelectOptionType[] = [];
-
-  if (Array.isArray(fieldValue)) {
-    fieldValue.forEach((fv) => {
-      const rv = selectOptions.filter((o) => o.value === fv);
-      if (rv) {
-        returnValue = returnValue.concat(rv);
-      }
-    });
-  } else {
-    returnValue = selectOptions.filter((o) => o.value === fieldValue);
-  }
-  return returnValue;
-}
+import { getOptionValues } from "@utils/getOptionValues";
 
 interface MyMultiSelectProps {
   name: string;
