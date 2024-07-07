@@ -4,10 +4,16 @@ import {
   MySelect,
   MyTextInput,
 } from "@components/Fields";
+import MyRadioButton from "@components/Fields/MyRadioButton";
 import Stack from "@mui/material/Stack";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
+const GENDER_OPTIONS = [
+  { value: "male", label: "Male" },
+  { value: "female", label: "Female" },
+  { value: "other", label: "Other" },
+];
 interface FormValues {
   firstName: string;
   lastName: string;
@@ -15,6 +21,7 @@ interface FormValues {
   jobType: string;
   languages?: number[];
   acceptedTerms: boolean;
+  gender?: string;
   isHuman?: boolean | null;
 }
 
@@ -25,6 +32,7 @@ const initialValues: FormValues = {
   jobType: "",
   languages: [],
   acceptedTerms: false,
+  gender: "",
   isHuman: null,
 };
 
@@ -49,6 +57,12 @@ const validationSchema = Yup.object({
             .required("Language selection is required for developers")
         : schema.notRequired();
     }),
+  gender: Yup.string()
+    .oneOf(
+      GENDER_OPTIONS.map((g) => g.value),
+      "Invalid gender"
+    )
+    .required("Please select a gender"),
   acceptedTerms: Yup.boolean()
     .required("Required")
     .oneOf([true], "You must accept the terms and conditions."),
@@ -68,7 +82,7 @@ const SignUpForm = () => {
       validationSchema={validationSchema}
       onSubmit={() => {}}
     >
-      {({ values }) => (
+      {({ values, touched, errors }) => (
         <form>
           <Stack spacing={2}>
             <MyTextInput
@@ -122,6 +136,17 @@ const SignUpForm = () => {
                 />
               </>
             )}
+
+            <MyRadioButton
+              label="Gender"
+              name="gender"
+              options={GENDER_OPTIONS}
+              handleDBSubmit={handleChange}
+              // if this is touched it won't generate an error, so do the error if it is passed
+              errorMessage={
+                touched.acceptedTerms && !!errors.gender ? errors.gender : ""
+              }
+            />
 
             <MyCheckbox
               name="acceptedTerms"
