@@ -1,4 +1,4 @@
-# Formik + Yup + TS
+# MUI + Formik + Yup + TS
 
 This tutorial is learning Formik, Yup and MUI tools.
 
